@@ -568,7 +568,6 @@ export default {
   },
   methods: {
     goBack() {
-      console.log(this.lastPath);
       this.$router.push(this.lastPath);
     }
   },
