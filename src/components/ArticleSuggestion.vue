@@ -8,6 +8,7 @@
       </router-link>
     </div>
     <swiper
+        class="suggestions-swiper"
         :slides-per-view="1"
         :slides-per-group="1"
         :space-between="20"
@@ -107,7 +108,7 @@ export default {
 </style>
 
 <style>
-.swiper-wrapper {
+.suggestions-swiper .swiper-wrapper {
   margin-bottom: 40px;
 }
 .swiper-button-next, .swiper-button-prev {
@@ -136,8 +137,8 @@ export default {
   transform: translateX(-45%);
 }
 
-.suggestions .swiper-button-next,
-.suggestions .swiper-button-prev {
+.suggestions-swiper .swiper-button-next,
+.suggestions-swiper .swiper-button-prev {
   background: #7481FF;
   color: #FFFFFF;
 }
