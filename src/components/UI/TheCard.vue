@@ -192,7 +192,6 @@ export default {
   width: 100%;
   aspect-ratio: 1 / 0.515;
 }
-
 .video__content, .video__content img {
   cursor: pointer;
 }
@@ -292,5 +291,8 @@ export default {
 }
 .car .swiper-scrollbar-drag{
   background: rgba(255, 255, 255, 0.7);
+}
+.car__content .swiper-wrapper {
+  margin-bottom: 0;
 }
 </style>

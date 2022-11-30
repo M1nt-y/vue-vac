@@ -405,7 +405,6 @@ export default {
 </style>
 
 <style>
-
 .navigation-button {
   position: absolute;
   top: 50%;
@@ -428,7 +427,9 @@ export default {
 .next-button {
   right: 0;
 }
-
+.car-content__swiper .swiper-wrapper {
+  margin-bottom: 0;
+}
 .car-content__swiper-mini,
 .car-content__swiper-mini .swiper,
 .car-content__swiper-mini .swiper-wrapper,
