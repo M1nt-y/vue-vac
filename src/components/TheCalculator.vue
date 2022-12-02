@@ -50,8 +50,10 @@
               </div>
             </div>
           </div>
-          <base-button v-bind="{ ...isBlue && { solidBlueBtn } }" v-if="$route.name !== 'Car'" />
-          <base-button v-bind="{ ...isBlue && { solidBlueBtn } }" v-else :btnContent="btnApply" />
+          <router-link :to="`/request/${quizId}`" v-if="$route.name !== 'Quiz'" >
+            <base-button v-bind="{ ...isBlue && { solidBlueBtn } }" v-if="$route.name !== 'Car'" />
+            <base-button v-bind="{ ...isBlue && { solidBlueBtn } }" v-else :btnContent="btnApply" />
+          </router-link>
         </div>
       </div>
       <div class="calculator calculator-amount" v-if="windowWidth>=840">
@@ -67,8 +69,10 @@
           <p class="calculator-amount__name">Weekly Payment</p>
           <h4>$ {{weeklyPayment}}</h4>
         </div>
-        <base-button v-bind="{ ...isBlue && { solidBlueBtn } }" v-if="$route.name !== 'Car'" />
-        <base-button v-bind="{ ...isBlue && { solidBlueBtn } }" v-else :btnContent="btnApply" />
+        <router-link :to="`/request/${quizId}`" v-if="$route.name !== 'Quiz'" >
+          <base-button v-bind="{ ...isBlue && { solidBlueBtn } }" v-if="$route.name !== 'Car'" />
+          <base-button v-bind="{ ...isBlue && { solidBlueBtn } }" v-else :btnContent="btnApply" />
+        </router-link>
       </div>
     </div>
   </div>
@@ -128,7 +132,11 @@ export default {
     price: {
       type: Number,
       default: 0
-    }
+    },
+    quizId: {
+      type: String || Number,
+      default: 'default'
+    },
   },
   methods: {
     setLimit() {

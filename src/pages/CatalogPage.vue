@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container">
-      <div class="inventory">
+      <div class="inventory" :class="{'opened': isOpen}">
         <div class="search">
           <div class="search__filter" v-if="windowWidth<=1040" @click="toggleFilter">
             <img src="@/assets/icons/filter-icon.svg" alt="">
@@ -19,7 +19,7 @@
             />
           </div>
         </div>
-        <div class="filters" :class="{'opened': isOpen}">
+        <div class="filters">
           <div class="filters__close" v-if="windowWidth<=1040" @click="toggleFilter">
             <img src="@/assets/icons/Close.svg" alt="">
           </div>
@@ -631,7 +631,7 @@ export default {
   .inventory {
     position: relative;
     grid-template-columns: 100%;
-    grid-template-rows: max-content 45px max-content;
+    grid-template-rows: 0 45px max-content;
     margin-top: 20px;
     gap: 20px 0;
     grid-template-areas:
@@ -639,10 +639,12 @@ export default {
     "search"
     "catalog";
   }
+  .inventory.opened {
+    grid-template-rows: max-content 0 max-content;
+  }
   .filters {
-    position: absolute;
+    position: relative;
     left: -24px;
-    z-index: 10;
     background: #FFFFFF;
     width: calc(100% + 48px);
     max-height: 0;
@@ -653,9 +655,12 @@ export default {
     margin: 10px auto 40px;
     max-width: 420px;
   }
-  .filters.opened {
-    overflow-y: scroll;
+  .opened .filters {
+    overflow: unset;
     max-height: unset;
+  }
+  .opened .search {
+    overflow: hidden;
   }
   .filters__close {
     position: absolute;
@@ -676,6 +681,9 @@ export default {
 @media screen and (max-width: 680px) {
   .inventory {
     grid-template-rows: 0 100px max-content;
+  }
+  .inventory.opened {
+    grid-template-rows: max-content 0 max-content;
   }
   .sort, .search__wrapper-content {
     width: 100%;

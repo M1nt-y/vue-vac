@@ -137,7 +137,7 @@
         </div>
       </div>
     </div>
-    <the-calculator :config="calculator" :name="title" :price="loanAmount" />
+    <the-calculator :config="calculator" :name="title" :price="loanAmount" :quizId="id" />
   </div>
 </template>
 

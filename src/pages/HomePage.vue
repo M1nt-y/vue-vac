@@ -21,7 +21,9 @@
                 <swiper-slide><img src="@/assets/images/VAN.png" alt=""></swiper-slide>
               </swiper>
             </div>
-            <base-button :btnContent="swiperBtn[currentBtn].content" />
+            <router-link to="/request/default">
+              <base-button :btnContent="swiperBtn[currentBtn].content" />
+            </router-link>
           </div>
         </div>
         <div class="home__section">
@@ -64,18 +66,15 @@
               <p class="advantage__title">Vehicle Delivery</p>
               <p class="advantage__description">We deliver your vehicle directly to your door. You don’t sign anything until you test drive the vehicle. There is never any obligation to buy beforehand.</p>
             </div>
-
             <div class="advantage advantage--reverse">
               <img class="advantage__icon" src="@/assets/images/advantage-2.png" alt="">
               <p class="advantage__title">Auto Financing</p>
               <p class="advantage__description">We partner with the largest lenders in Canada to offer the strongest financing options in the industry—including rates as low as 4%</p>
             </div>
-
             <div class="advantage">
               <img class="advantage__icon" src="@/assets/images/advantage-3.png" alt="">
               <p class="advantage__title">Huge Inventory</p>
               <p class="advantage__description">We have access to thousands of high-quality vehicles and offer them to you at wholesale prices. Your dream car is waiting for you</p>
-
             </div>
           </div>
         </div>
@@ -90,7 +89,9 @@
             <h2 class="section-title">Choose your dream vehicle in our catalog</h2>
             <div>
               <p class="section-text">In our catalogue there are many models of vehicles. Choose your car to your liking.</p>
-              <base-button />
+              <router-link to="/request/default">
+                <base-button />
+              </router-link>
             </div>
           </div>
         </div>
@@ -107,7 +108,9 @@
             </div>
             <div class="home__stats-content">
               <h4 class="section-heading">What are you waiting? Get started right now!</h4>
-              <base-button />
+              <router-link to="/request/default">
+                <base-button />
+              </router-link>
             </div>
           </div>
         </div>
@@ -263,6 +266,7 @@ export default {
   margin-top: 80px;
 }
 .home__head-top .button {
+  width: 200px;
   margin-top: -80px;
 }
 .head__title {

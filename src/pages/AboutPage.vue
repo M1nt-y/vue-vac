@@ -7,7 +7,9 @@
           <div class="about__section-card">
             <h2 class="section-title">Our mission</h2>
             <p class="section-text">Our mission at VAC is to help you find the perfect car at the perfect price and with the perfect auto loan. We make buying a car simple. You can complete the entire process from home—we’ll even deliver the car to you!</p>
-            <base-button v-bind="{ ...isBlue && { solidBlueBtn } }" />
+            <router-link to="/request/default">
+              <base-button v-bind="{ ...isBlue && { solidBlueBtn } }" />
+            </router-link>
           </div>
           <img src="@/assets/images/Kia.png" alt="">
         </div>
@@ -42,7 +44,9 @@
           <div class="about__section-content">
             <h3 class="section-subtitle">We think that VAC is the best way to buy a car in Canada. Try it for yourself and see how much time and money you can save.</h3>
             <p class="section-text">There are never any hidden fees or costs. We never ask you to sign anything until we have explained it clearly and you have had a chance to read it.</p>
-            <base-button v-bind="{ ...isBlue && { solidBlueBtn } }" />
+            <router-link to="/request/default">
+              <base-button v-bind="{ ...isBlue && { solidBlueBtn } }" />
+            </router-link>
           </div>
         </div>
       </div>
@@ -50,7 +54,7 @@
         <div class="container">
           <div class="about__section-card">
             <h3 class="section-subtitle">Contact us today and speak with one of our qualified agents</h3>
-            <base-button v-bind="{ ...isBlue && { solidBlueBtn } }" :btnContent="contactBtn" />
+            <base-button v-bind="{ ...isBlue && { solidBlueBtn } }" :btnContent="contactBtn" @click="openContact" @click.stop />
           </div>
           <div class="about__section-content">
             <h2 class="section-title">Our qualified agents</h2>
@@ -144,7 +148,7 @@ import HeadTitle from "@/components/HeadTitle";
 import TheCalculator from "@/components/TheCalculator";
 import StepList from "@/components/StepList";
 
-import { Navigation, A11y } from 'swiper';
+import { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -187,9 +191,14 @@ export default {
   },
   setup() {
     return {
-      modules: [Navigation, A11y],
+      modules: [Navigation],
     };
   },
+  methods: {
+    openContact() {
+      this.$emit('request', this.carName);
+    }
+  }
 }
 </script>
 

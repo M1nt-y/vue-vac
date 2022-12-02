@@ -7,7 +7,9 @@
           <div class="loan__section-card">
             <h2 class="section-title">Our mission</h2>
             <p class="section-text">Our mission at VAC is to help you find the perfect car at the perfect price and with the perfect auto loan. We make buying a car simple. You can complete the entire process from home—we’ll even deliver the car to you!</p>
-            <base-button v-bind="{ ...isBlue && { solidBlueBtn } }" />
+            <router-link to="/request/default">
+              <base-button v-bind="{ ...isBlue && { solidBlueBtn } }" />
+            </router-link>
           </div>
           <img src="@/assets/images/Chevrolet.png" alt="">
         </div>
@@ -39,7 +41,9 @@
             <h2 class="section-title">Benefits of getting an auto loan with VAC</h2>
             <p class="section-text">For many people getting a reasonable auto loan is the best way for them to get a new car. However, the benefits of getting the right loan go beyond just being able to drive a nice vehicle.</p>
             <h4 class="section-subtitle">When you work with VAC, there are never any hidden costs or fees! We lay out all the terms and conditions so that you know exactly what details of the loan are before you sign anything.</h4>
-            <base-button v-bind="{ ...isBlue && { solidBlueBtn } }" />
+            <router-link to="/request/default">
+              <base-button v-bind="{ ...isBlue && { solidBlueBtn } }" />
+            </router-link>
           </div>
           <img src="@/assets/images/Ford.png" alt="">
         </div>
