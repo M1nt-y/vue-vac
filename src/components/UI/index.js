@@ -1,6 +1,5 @@
 import TheAccordion from "@/components/UI/TheAccordion";
 import BaseButton from "@/components/UI/BaseButton";
-import RangeSlider from "@/components/UI/RangeSlider";
 import TheCard from "@/components/UI/TheCard";
 import TheModal from "@/components/UI/TheModal";
 import TheInput from "@/components/UI/TheInput";
@@ -13,7 +12,6 @@ import TheSearch from "@/components/UI/TheSearch";
 export default [
     TheAccordion,
     BaseButton,
-    RangeSlider,
     TheCard,
     TheModal,
     TheInput,

@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" :class="{'active': isActive}" @click="isActive=false">
+  <div class="wrapper" :class="{'active': isActive, 'has-scroll': hasScroll}" @click="isActive=false">
     <the-preloader :loaded="isLoaded" />
     <the-header
         :isContact="isContact"
@@ -39,6 +39,7 @@ export default {
       isActive: false,
       isContact: false,
       isSuccess: false,
+      hasScroll: false,
       carId: 'default',
       carName: 'Name of selected vehicle'
     }
@@ -57,13 +58,13 @@ export default {
     }
   },
   mounted() {
-    window.onresize = () => {
-      this.windowWidth = window.innerWidth
-    }
     document.onreadystatechange = () => {
       if (document.readyState === "complete") {
         this.isLoaded = true;
       }
+    }
+    window.onresize = () => {
+      this.windowWidth = window.innerWidth
     }
   },
   watch: {
@@ -77,10 +78,10 @@ export default {
       if (!this.isActive) {
         this.isContact = false;
         this.isSuccess = false;
-        document.documentElement.style.overflow = 'auto'
+        document.documentElement.style.overflowY = 'auto'
       }
       else {
-        document.documentElement.style.overflow = 'hidden'
+        document.documentElement.style.overflowY = 'hidden'
       }
     },
   }
@@ -89,6 +90,10 @@ export default {
 
 <style>
 @import url(@/assets/fonts/fonts.css);
+html {
+  overflow-x: hidden;
+  margin-right: calc(-1 * (100vw - 100%));
+}
 * {
   margin: 0;
   padding: 0;
@@ -114,9 +119,6 @@ export default {
   color: #606276;
 }
 
-.active {
-  overflow: hidden;
-}
 .logo {
   display: flex;
   gap: 5px;
@@ -168,6 +170,8 @@ export default {
   min-height: 100%;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+  margin-right: calc(-1 * (100vw - 100%));
 }
 .main {
   position: relative;
@@ -175,7 +179,6 @@ export default {
   margin-top: 80px;
   flex: 1 1 auto;
 }
-
 @media screen and (max-width: 1248px) {
   .container {
     margin: 0 24px;

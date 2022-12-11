@@ -16,7 +16,7 @@
         navigation
         :breakpoints="swiperOptions.breakpoints"
     >
-      <swiper-slide v-for="item in news.content" :key="item.id">
+      <swiper-slide v-for="item in newsArray" :key="item.id">
         <the-card :content="item" :cardType="news.cardType" />
       </swiper-slide>
     </swiper>
@@ -79,6 +79,22 @@ export default {
       }
     }
   },
+  computed: {
+    newsArray() {
+      let temp = [];
+      if (!this.$route.params.id) {
+        return this.news.content;
+      }
+      else {
+        for (let i = 0; i < this.news.content.length; i++) {
+          if (this.$route.params.id !== this.news.content[i].id.toString()) {
+            temp.push(this.news.content[i])
+          }
+        }
+      }
+      return temp;
+    }
+  },
   mounted() {
     window.onresize = () => {
       this.windowWidth = window.innerWidth
@@ -108,10 +124,13 @@ export default {
 </style>
 
 <style>
+.suggestions-swiper {
+  padding: 0 10px;
+}
 .suggestions-swiper .swiper-wrapper {
   margin-bottom: 40px;
 }
-.swiper-button-next, .swiper-button-prev {
+.suggestions-swiper .swiper-button-next, .suggestions-swiper .swiper-button-prev {
   margin-top: 0;
   transform: translateY(-50%);
   width: 53px;
@@ -121,18 +140,20 @@ export default {
   transition: opacity 0.4s ease-in;
   opacity: 0.8;
 }
-.swiper-button-next:hover, .swiper-button-prev:hover { opacity: 1; }
-.swiper-button-prev { left: 0; }
-.swiper-button-next { right: 0; }
-.swiper-button-next:after, .swiper-button-prev:after {
+.suggestions-swiper .swiper-button-next:hover,
+.suggestions-swiper .swiper-button-prev:hover { opacity: 1; }
+.suggestions-swiper .swiper-button-prev { left: 10px; }
+.suggestions-swiper .swiper-button-next { right: 10px; }
+.suggestions-swiper .swiper-button-next:after,
+.suggestions-swiper .swiper-button-prev:after {
   position: absolute;
   font-size: 22px;
 }
-.swiper-button-next:after {
+.suggestions-swiper .swiper-button-next:after {
   left: 55%;
   transform: translateX(-55%);
 }
-.swiper-button-prev:after {
+.suggestions-swiper .swiper-button-prev:after {
   left: 45%;
   transform: translateX(-45%);
 }
@@ -143,11 +164,11 @@ export default {
   color: #FFFFFF;
 }
 @media screen and (max-width: 680px) {
-  .swiper-button-next, .swiper-button-prev {
+  .suggestions-swiper .swiper-button-next, .suggestions-swiper .swiper-button-prev {
     width: 35px;
     height: 35px;
   }
-  .swiper-button-next:after, .swiper-button-prev:after {
+  .suggestions-swiper .swiper-button-next:after, .suggestions-swiper .swiper-button-prev:after {
     position: absolute;
     font-size: 15px;
   }

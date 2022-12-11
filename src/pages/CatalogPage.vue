@@ -8,7 +8,7 @@
             <p v-if="windowWidth>760">Search filter</p>
           </div>
           <div class="search__wrapper">
-            <the-input class="search__wrapper-content" :isSearch="true" />
+            <the-input class="search__wrapper-content" @onTyping="getSearch" :isSearch="true" />
             <img src="@/assets/icons/share-icon.svg" alt="">
           </div>
           <div class="sort">
@@ -88,38 +88,54 @@
               </the-accordion>
               <the-accordion :class="{'not-empty': !defaultPrice}" :title="priceFilter">
                 <div class="filter-numbers">
-                  <p class="filter-number"><span>$ {{ minPrice }}</span></p>
-                  <p class="filter-number"><span>$ {{ maxPrice }}</span></p>
+                  <p class="filter-number"><span>$ {{ currentPrice[0] }}</span></p>
+                  <p class="filter-number"><span>$ {{ currentPrice[1] }}</span></p>
                 </div>
-                <div class="double range-slider">
-                  <range-slider id="min-price" :range="priceRange" :isMin="isMin" @change="changeMinPrice" @changeValue="setPriceMin"/>
-                  <range-slider id="max-price" :range="priceRange" class="second" @change="changeMaxPrice" @changeValue="setPriceMax"/>
+                <div class="range-slider">
+                  <Slider
+                      :min="priceRange.min"
+                      :max="priceRange.max"
+                      :step="priceRange.step"
+                      :tooltips="false"
+                      v-model="currentPrice"
+                  />
                 </div>
                 <template #tags v-if="!defaultPrice">
                   <div class="tag" @click="clearPrice">
-                    <img src="@/assets/icons/Close.svg" alt="">$ {{ minPrice }} - $ {{ maxPrice }}
+                    <img src="@/assets/icons/Close.svg" alt="">$ {{ currentPrice[0] }} - $ {{ currentPrice[1] }}
                   </div>
                 </template>
               </the-accordion>
               <the-accordion :class="{'not-empty': !defaultYear}" :title="yearFilter">
                 <div class="filter-numbers">
-                  <p class="filter-number"><span>{{ minYear }}</span></p>
-                  <p class="filter-number"><span>{{ maxYear }}</span></p>
+                  <p class="filter-number"><span>{{ currentYear[0] }}</span></p>
+                  <p class="filter-number"><span>{{ currentYear[1] }}</span></p>
                 </div>
-                <div class="double range-slider">
-                  <range-slider id="min-year" :range="yearRange" :isMin="isMin" @change="changeMinYear" @changeValue="setYearMin"/>
-                  <range-slider id="max-year" :range="yearRange" class="second" @change="changeMaxYear" @changeValue="setYearMax"/>
+                <div class="range-slider">
+                  <Slider
+                      :min="yearRange.min"
+                      :max="yearRange.max"
+                      :step="yearRange.step"
+                      :tooltips="false"
+                      v-model="currentYear"
+                  />
                 </div>
                 <template #tags v-if="!defaultYear">
                   <div class="tag" @click="clearYear">
-                    <img src="@/assets/icons/Close.svg" alt="">{{ minYear }} - {{ maxYear }}
+                    <img src="@/assets/icons/Close.svg" alt="">{{ currentYear[0] }} - {{ currentYear[1] }}
                   </div>
                 </template>
               </the-accordion>
               <the-accordion :class="{'not-empty': !defaultKm}" :title="kilometersFilter">
                 <p class="filter-number"><span>{{ currentKm }}</span> or less</p>
                 <div class="range-slider">
-                  <range-slider id="km-range" :range="kmRange" @changeValue="setKm" />
+                  <Slider
+                      :min="kmRange.min"
+                      :max="kmRange.max"
+                      :step="kmRange.step"
+                      :tooltips="false"
+                      v-model="currentKm"
+                  />
                 </div>
                 <template #tags v-if="!defaultKm">
                   <div class="tag" @click="clearKm">
@@ -134,14 +150,13 @@
           <card-list
               v-bind="cars"
               :sort="selectedSort"
+              :searchInput="searchInput"
               :searchMake="searchMakes"
               :searchModel="searchModels"
               :filterBody="checkedBody"
               :filterTransmission="checkedTransmission"
-              :minPrice="minPrice"
-              :maxPrice="maxPrice"
-              :minYear="minYear"
-              :maxYear="maxYear"
+              :priceFilter="currentPrice"
+              :yearFilter="currentYear"
               :kmLimit="currentKm"
           />
         </div>
@@ -152,10 +167,11 @@
 
 <script>
 import CardList from "@/components/CardList";
+import Slider from '@vueform/slider';
 
 export default {
   name: "CatalogPage",
-  components: {CardList},
+  components: {CardList, Slider},
   data() {
     return {
       cars: {
@@ -221,6 +237,7 @@ export default {
       priceFilter: 'Price',
       yearFilter: 'Year',
       kilometersFilter: 'Kilometers',
+      searchInput: '',
       selectedSort: '',
       searchMake: '',
       searchModel: '',
@@ -248,25 +265,10 @@ export default {
         { value: 'priceDesc', name: 'Highest price' }
       ],
       isMin: true,
-      minPrice: 0,
-      maxPrice: 0,
-      minGap: 0,
-      minYear: 0,
-      maxYear: 0,
-      priceSteps: 0,
-      yearSteps: 0,
+      currentPrice: [0,0],
+      currentYear: [0,0],
       currentKm: 0,
       priceRange: {
-        min: 0,
-        max: 200000,
-        step: 10000,
-      },
-      priceMinRange: {
-        min: 0,
-        max: 200000,
-        step: 10000,
-      },
-      priceMaxRange: {
         min: 0,
         max: 200000,
         step: 10000,
@@ -294,6 +296,9 @@ export default {
     }
   },
   methods: {
+    getSearch(input) {
+      this.searchInput = input;
+    },
     getMake(input) {
       this.searchMake = input;
     },
@@ -307,21 +312,6 @@ export default {
     toggleModel() {
       this.searchingMake = false;
       this.searchingModel = true;
-    },
-    setKm(value) {
-      this.currentKm = value;
-    },
-    setPriceMin(value) {
-      this.minPrice = value;
-    },
-    setPriceMax(value) {
-      this.maxPrice = value;
-    },
-    setYearMin(value) {
-      this.minYear = value;
-    },
-    setYearMax(value) {
-      this.maxYear = value;
     },
     clearMake(tag) {
       for (let i = 0; i < this.searchMakes.length; i++) {
@@ -376,20 +366,17 @@ export default {
       }
     },
     clearPrice() {
-      this.minPrice = this.priceRange.min;
-      this.maxPrice = this.priceRange.max;
-      document.getElementById('min-price').value = this.priceRange.min;
-      document.getElementById('max-price').value = this.priceRange.max;
+      this.currentPrice[0] = this.priceRange.min;
+      this.currentPrice[1] = this.priceRange.max;
+      this.defaultPrice = true;
     },
     clearYear() {
-      this.minYear = this.yearRange.min;
-      this.maxYear = this.yearRange.max;
-      document.getElementById('min-year').value = this.yearRange.min;
-      document.getElementById('max-year').value = this.yearRange.max;
+      this.currentYear[0] = this.yearRange.min;
+      this.currentYear[1] = this.yearRange.max;
+      this.defaultYear = true;
     },
     clearKm() {
       this.currentKm = this.kmRange.max;
-      document.getElementById('km-range').value = this.kmRange.max;
     },
     clearFilters() {
       this.clearMake();
@@ -403,26 +390,6 @@ export default {
     toggleFilter() {
       this.isOpen = !this.isOpen;
     },
-    changeMinPrice() {
-      if (this.maxPrice - this.minPrice <= this.priceRange.step) {
-        this.minPrice = document.getElementById('min-price').value = this.maxPrice - this.priceRange.step;
-      }
-    },
-    changeMaxPrice() {
-      if (this.maxPrice - this.minPrice <= this.priceRange.step) {
-        this.maxPrice = document.getElementById('max-price').value = this.minPrice + this.priceRange.step;
-      }
-    },
-    changeMinYear() {
-      if (this.maxYear - this.minYear <= this.yearRange.step) {
-        this.minYear = document.getElementById('min-year').value = this.maxYear - this.yearRange.step;
-      }
-    },
-    changeMaxYear() {
-      if (this.maxYear - this.minYear <= this.yearRange.step) {
-        this.maxYear = document.getElementById('max-year').value = this.minYear + this.yearRange.step;
-      }
-    }
   },
   computed: {
     getMakes() {
@@ -457,13 +424,11 @@ export default {
   },
   beforeMount() {
     this.cars.totalItems = this.cars.content.length;
-    this.priceRange.max = Math.ceil(Math.max(...this.cars.content.map(car => car.price))/10000)*10000;
-    this.priceRange.min = Math.floor(Math.min(...this.cars.content.map(car => car.price))/10000)*10000;
-    this.priceSteps = (this.priceRange.max - this.priceRange.min) / this.priceRange.step;
-    this.yearRange.max = Math.max(...this.cars.content.map(car => car.year));
-    this.yearRange.min = Math.min(...this.cars.content.map(car => car.year));
-    this.yearSteps = (this.yearRange.max - this.yearRange.min) / this.yearRange.step;
-    this.kmRange.max = Math.ceil(Math.max(...this.cars.content.map(car => car.kilometers))/10000)*10000;
+    this.priceRange.max = this.currentPrice[1] = Math.ceil(Math.max(...this.cars.content.map(car => car.price))/10000)*10000;
+    this.priceRange.min = this.currentPrice[0] = Math.floor(Math.min(...this.cars.content.map(car => car.price))/10000)*10000;
+    this.yearRange.max = this.currentYear[1] = Math.max(...this.cars.content.map(car => car.year));
+    this.yearRange.min = this.currentYear[0] = Math.min(...this.cars.content.map(car => car.year));
+    this.kmRange.max = this.currentKm = Math.ceil(Math.max(...this.cars.content.map(car => car.kilometers))/10000)*10000;
   },
   mounted() {
     window.onresize = () => {
@@ -483,37 +448,11 @@ export default {
     checkedTransmission() {
       this.haveTransmission = !!this.checkedTransmission.length;
     },
-    minPrice() {
-      if (this.minPrice !== this.priceRange.min) {
-        this.defaultPrice = false;
-      }
-      else {
-        this.defaultPrice = this.maxPrice === this.priceRange.max;
-      }
+    currentPrice() {
+      this.defaultPrice = !(this.currentPrice[0] !== this.priceRange.min || this.currentPrice[1] !== this.priceRange.max);
     },
-    maxPrice() {
-      if (this.maxPrice !== this.priceRange.max) {
-        this.defaultPrice = false;
-      }
-      else {
-        this.defaultPrice = this.minPrice === this.priceRange.min;
-      }
-    },
-    minYear() {
-      if (this.minYear !== this.yearRange.min) {
-        this.defaultYear = false
-      }
-      else {
-        this.defaultYear = this.maxYear === this.yearRange.max;
-      }
-    },
-    maxYear() {
-      if (this.maxYear !== this.yearRange.max) {
-        this.defaultYear = false
-      }
-      else {
-        this.defaultYear = this.minYear === this.yearRange.min;
-      }
+    currentYear() {
+      this.defaultYear = !(this.currentYear[0] !== this.yearRange.min || this.currentYear[1] !== this.yearRange.max);
     },
     currentKm() {
       this.defaultKm = this.currentKm === this.kmRange.max;
@@ -612,6 +551,7 @@ export default {
   position: relative;
   width: 100%;
   height: 15px;
+  padding: 0 10px;
 }
 
 .tag {
@@ -703,7 +643,7 @@ export default {
   }
 }
 </style>
-
+<style src="@vueform/slider/themes/default.css" />
 <style>
 .inventory .accordion-wrapper {
   padding: 10px 20px;
@@ -726,6 +666,30 @@ export default {
 }
 .inventory .expanded .accordion__content {
   padding: 10px 0;
+}
+
+
+.slider-horizontal {
+  height: 8px;
+  background: #D7D7D7;
+}
+.slider-connect {
+  background: #7481FF;
+}
+.slider-touch-area {
+  border: 1px solid #FFFFFF;
+  height: 18px;
+  width: 18px;
+  background: #7481FF;
+}
+.slider-handle:focus {
+  box-shadow: none;
+}
+.slider-horizontal,
+.slider-connect,
+.slider-touch-area,
+.slider-base, .slider-connects {
+  border-radius: 2px;
 }
 
 </style>

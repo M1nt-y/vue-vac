@@ -18,19 +18,33 @@
         <div class="calculator__content">
           <div class="calculator__data">
             <p class="calculator__data-text">Loan Amount</p>
-            <h4 class="calculator__data-number">$ {{loanAmount}}</h4>
+            <h4 class="calculator__data-number">$ {{ loanAmount }}</h4>
           </div>
           <div class="range-slider" v-if="!config.isFixed">
-            <range-slider :range="amount" @changeValue="setAmount"/>
+            <Slider
+                :min="amount.min"
+                :max="amount.max"
+                :step="amount.step"
+                :tooltips="false"
+                :lazy="false"
+                v-model="loanAmount"
+            />
           </div>
         </div>
         <div class="calculator__content">
           <div class="calculator__data">
             <p class="calculator__data-text">Loan Amount</p>
-            <h4 class="calculator__data-number">{{loanDuration}}<span> Month</span></h4>
+            <h4 class="calculator__data-number">{{ loanDuration }}<span> Month</span></h4>
           </div>
           <div class="range-slider">
-            <range-slider :range="duration" @changeValue="setDuration"/>
+            <Slider
+                :min="duration.min"
+                :max="duration.max"
+                :step="duration.step"
+                :tooltips="false"
+                :lazy="false"
+                v-model="loanDuration"
+            />
           </div>
         </div>
         <div class="calculator__amount" v-if="windowWidth<840">
@@ -79,8 +93,11 @@
 </template>
 
 <script>
+import Slider from '@vueform/slider';
+
 export default {
   name: "TheCalculator",
+  components: {Slider},
   data() {
     return {
       solidBlueBtn: {
@@ -156,6 +173,9 @@ export default {
       if (!this.isPoor) {
         this.isPoor = true;
         this.setLimit();
+        if (this.loanAmount > this.amount.max) {
+          this.loanAmount = this.amount.max;
+        }
       }
     },
     setAverage() {
@@ -164,6 +184,9 @@ export default {
       if (!this.isAverage) {
         this.isAverage = true;
         this.setLimit();
+        if (this.loanAmount > this.amount.max) {
+          this.loanAmount = this.amount.max;
+        }
       }
     },
     setGood() {
@@ -172,15 +195,10 @@ export default {
       if (!this.isGood) {
         this.isGood = true;
         this.setLimit();
+        if (this.loanAmount > this.amount.max) {
+          this.loanAmount = this.amount.max;
+        }
       }
-    },
-    setAmount(value) {
-      this.loanAmount = value;
-      this.calculatePayment();
-    },
-    setDuration(value) {
-      this.loanDuration = value;
-      this.calculatePayment();
     },
     calculatePayment() {
       this.monthlyPayment = Math.round(this.loanAmount / this.loanDuration);
@@ -190,6 +208,7 @@ export default {
   },
   beforeMount() {
     this.setPoor();
+    this.calculatePayment();
     if (this.name !== '') {
       this.title = this.name;
     }
@@ -202,6 +221,14 @@ export default {
       this.windowWidth = window.innerWidth
     }
   },
+  watch: {
+    loanAmount() {
+      this.calculatePayment();
+    },
+    loanDuration() {
+      this.calculatePayment();
+    }
+  }
 }
 </script>
 
@@ -392,5 +419,29 @@ export default {
     line-height: 28px;
   }
 }
-
+</style>
+<style src="@vueform/slider/themes/default.css" />
+<style>
+.slider-horizontal {
+  height: 8px;
+  background: #D7D7D7;
+}
+.slider-connect {
+  background: #7481FF;
+}
+.slider-touch-area {
+  border: 1px solid #FFFFFF;
+  height: 18px;
+  width: 18px;
+  background: #7481FF;
+}
+.slider-handle:focus {
+  box-shadow: none;
+}
+.slider-horizontal,
+.slider-connect,
+.slider-touch-area,
+.slider-base, .slider-connects {
+  border-radius: 2px;
+}
 </style>

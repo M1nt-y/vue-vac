@@ -4,7 +4,7 @@
         :totalPages="totalPages"
         :totalItems="content.length"
         :itemsPerPage="itemsPerPage"
-        :items="filteringKm"
+        :items="searchingAll"
     >
       <template #data="{paginatedItems}">
       <div class="card-list" :class="{ 'card-list--news': cardType.isNews, 'card-list--video': cardType.isVideo, 'card-list--car': cardType.isCar }">
@@ -63,6 +63,10 @@ export default {
       type: String,
       required: false
     },
+    searchInput: {
+      type: String,
+      default: '',
+    },
     searchMake: {
       type: Array,
       required: false
@@ -79,20 +83,12 @@ export default {
       type: Array,
       required: false
     },
-    minPrice: {
-      type: Number,
+    priceFilter: {
+      type: Array,
       required: false
     },
-    maxPrice: {
-      type: Number,
-      required: false
-    },
-    minYear: {
-      type: Number,
-      required: false
-    },
-    maxYear: {
-      type: Number,
+    yearFilter: {
+      type: Array,
       required: false
     },
     kmLimit: {
@@ -177,19 +173,26 @@ export default {
       if (!this.cardType.isCar) {
         return this.filteringTransmission;
       }
-      return this.filteringTransmission.filter(item => (item.price >= this.minPrice && item.price <= this.maxPrice));
+      return this.filteringTransmission.filter(item => (item.price >= this.priceFilter[0] && item.price <= this.priceFilter[1]));
     },
     filteringYear() {
       if (!this.cardType.isCar) {
         return this.filteringPrice;
       }
-      return this.filteringPrice.filter(item => (item.year >= this.minYear && item.year <= this.maxYear));
+      return this.filteringPrice.filter(item => (item.year >= this.yearFilter[0] && item.year <= this.yearFilter[1]));
     },
     filteringKm() {
       if (!this.cardType.isCar) {
         return this.filteringYear;
       }
       return this.filteringYear.filter(item => (item.kilometers >= 0 && item.kilometers <= this.kmLimit));
+    },
+    searchingAll() {
+
+      if (!this.cardType.isCar) {
+        return this.filteringKm;
+      }
+      return this.filteringKm.filter(item => (item.make + ' ' + item.model).toLowerCase().includes(this.searchInput.toLowerCase()));
     }
   },
   watch: {

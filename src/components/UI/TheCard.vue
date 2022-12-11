@@ -189,8 +189,10 @@ export default {
   position: relative;
 }
 .car__content img {
+  max-width: unset;
   width: 100%;
   aspect-ratio: 1 / 0.515;
+  object-fit: cover;
 }
 .video__content, .video__content img {
   cursor: pointer;
@@ -294,5 +296,8 @@ export default {
 }
 .car__content .swiper-wrapper {
   margin-bottom: 0;
+}
+.car__content .swiper-slide {
+
 }
 </style>

@@ -229,10 +229,13 @@ export default {
 <style scoped>
 .header {
   z-index: 11;
-  width: 100%;
   position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
+  margin-right: calc(-1 * (100vw - 100%));
 }
+
 .header .container {
   position: relative;
   display: flex;
@@ -272,7 +275,7 @@ export default {
 .navbar {
   position: fixed;
   top: 0;
-  right: -180px;
+  right: -200px;
   height: 100vh;
   background: #FFFFFF;
   width: 0;
@@ -372,13 +375,13 @@ a:-webkit-any-link {
   color: #41456B;
 }
 .active .navbar {
+  overflow: auto;
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.12);
-  overflow-y: scroll;
   right: 0;
   width: 40%;
 }
 .glass {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
